@@ -1,0 +1,172 @@
+{
+    "form_fields": [
+      {
+        "field_name": "1. Type of Enrolment",
+        "type": "radio",
+        "options": ["New Enrolment", "Update"]
+      },
+      {
+        "field_name": "2. Status",
+        "type": "radio",
+        "options": ["Resident Indian", "Non-Resident Indian (NRI)"]
+      },
+      {
+        "field_name": "3. In case of Update - Aadhaar Number (UID)",
+        "type": "text"
+      },
+      {
+         "field_name": "Biometric Update",
+         "options": ["Photo", "Fingerprint", "Iris"]
+      },
+     {
+        "field_name": "Update Fields",
+        "options": ["Mobile", "Date of Birth", "Address", "Name", "Gender", "Email", "Document update", "Language only Update"]
+      },
+      {
+        "field_name": "4. Name (Name as per POI document)",
+        "type": "text"
+      },
+      {
+        "field_name": "5. Gender",
+        "type": "radio",
+        "options": ["Male", "Female", "Transgender"]
+      },
+      {
+        "field_name": "6. Age",
+        "type": "number"
+      },
+      {
+        "field_name": "6. Date of Birth",
+        "type": "date",
+        "options": ["Approximate", "Declared", "Verified"]
+      },
+      {
+        "field_name": "7. Address",
+        "fields": [
+          {
+            "field_name": "C/o (Name-optional)",
+            "type": "text"
+          },
+          {
+            "field_name": "House No./ Bldg./Apt",
+            "type": "text"
+          },
+          {
+            "field_name": "Street/Road/Lane",
+            "type": "text"
+          },
+          {
+            "field_name": "Landmark",
+            "type": "text"
+          },
+          {
+             "field_name": "Ward No",
+             "type": "text"
+          },
+          {
+             "field_name": "Area/Locality/Sector",
+             "type": "text"
+          },
+          {
+             "field_name": "Village/Town/City",
+             "type": "text"
+          },
+          {
+             "field_name": "Post Office (Mandatory)",
+             "type": "text"
+          },
+          {
+             "field_name": "District",
+             "type": "text"
+          },
+          {
+             "field_name": "Sub-District",
+             "type": "text"
+          },
+          {
+             "field_name": "State",
+             "type": "text"
+          },
+          {
+             "field_name": "E-Mail",
+             "type": "email"
+          },
+          {
+             "field_name": "Mobile No.",
+             "type": "text"
+          },
+          {
+             "field_name": "Pin Code (Mandatory)",
+             "type": "text"
+          }
+        ]
+      },
+      {
+        "field_name": "Verification Type",
+        "type": "radio",
+        "options": ["Document Based", "Head of Family (HoF) Based"]
+      },
+      {
+        "field_name": "8. For Document Based Enrolment",
+        "fields": [
+          {
+            "field_name": "a. POI (Proof of Identity)",
+            "type": "text"
+          },
+          {
+            "field_name": "b. POA (Proof of Address)",
+            "type": "text"
+          },
+          {
+            "field_name": "c. DOB (Date of Birth) (Mandatory in case of Verified Date of Birth)",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "field_name": "9. For HOF Based Enrolment - Details of",
+        "options": ["Father", "Mother", "Guardian", "Husband", "Wife", "Others (specify)"]
+      },
+      {
+        "field_name": "a. HoF's Aadhaar No.",
+        "type": "text"
+      },
+      {
+        "field_name": "b. POI",
+        "type": "text"
+      },
+     {
+        "field_name": "c. POR (Proof of Relationship)",
+        "type": "text"
+      },
+      {
+        "field_name": "d. DOB (Mandatory in case of Verified Date of Birth)",
+        "type": "text"
+      },
+     {
+       "field_name": "HoF's Name",
+       "type": "text"
+     },
+     {
+       "field_name": "11. Demographic/ Document update",
+       "fields": [
+         {
+           "field_name": "a. POI (Proof of Identity)",
+           "type": "text"
+         },
+         {
+           "field_name": "b. POA (Proof of Address)",
+           "type": "text"
+         },
+         {
+           "field_name": "c. DOB (Date of Birth)",
+           "type": "text"
+         },
+         {
+           "field_name": "d. POR (Proof of Relation)",
+           "type": "text"
+         }
+       ]
+     }
+    ]
+  }

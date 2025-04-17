@@ -108,9 +108,9 @@ const MainPage: React.FC = () => {
       color: 'bg-secondary/20 text-secondary',
     },
     {
-      id: 'pan',
-      title: 'PAN Card',
-      description: 'Apply for Permanent Account Number for tax purposes',
+      id: 'voter id',
+      title: 'Voter ID',
+      description: 'Apply for Voter ID or update your details',
       icon: CreditCard,
       color: 'bg-accent/20 text-accent',
     },

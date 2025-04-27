@@ -4,7 +4,7 @@ import HeroSection from "@/components/HeroSection";
 import FeaturesSection from "@/components/FeaturesSection";
 import BenefitsSection from "@/components/BenefitsSection";
 import DemoSection from "@/components/DemoSection";
-import TestimonialsSection from "@/components/TestimonalSection"; // Ensure this file exists in the specified path
+import TestimonialsSection from "@/components/TestimonalSection"; 
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 

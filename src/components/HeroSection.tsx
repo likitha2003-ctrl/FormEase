@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Mic } from "lucide-react";
 import { useState } from "react";
@@ -11,14 +10,14 @@ const HeroSection = () => {
   
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      {/* Background image with overlay */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center z-0 opacity-80" 
-        style={{ 
-          backgroundImage: `url('/photo2.jpeg')`,
-          backgroundBlendMode: 'cover',
-          backgroundSize: 'cover',
-        }}
+      {/* Background video with overlay */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover z-0 opacity-80"
+        src="/video.mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
       />
       
       {/* Overlay gradient for additional depth */}
@@ -67,7 +66,7 @@ const HeroSection = () => {
               </div>
               
               {/* Animated text bubble */}
-              <div className={`absolute top-0 right-0 bg-white p-4 rounded-xl shadow-lg transition-all duration-500 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+              <div className={`absolute top-0 right-0 bg-white p-4 rounded-xl shadow-lg transition-all duration-500 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} z-20`}>
                 <div className="animate-typing font-medium">
                   "Fill this form with my voice..."
                 </div>

@@ -59,7 +59,7 @@ const Header = () => {
         <div className="flex items-center space-x-2">
           <div className="h-8 w-8 rounded-full flex items-center justify-center"
             style={{ 
-              backgroundImage: "url('/public/logo.jpeg')", 
+              background: "url('/public/logo.jpeg')", 
               backgroundSize: 'cover' }}
             />
           <span className="font-bold text-xl text-primary hover:text-orange-600 transition-colors">FormEase</span>
@@ -70,7 +70,7 @@ const Header = () => {
             <a 
               key={link.title}
               href={link.href} 
-              className="text-foreground/80 hover:text-primary transition-colors"
+              className="text-foreground/80 text-xl hover:text-primary transition-colors"
             >
               {link.title}
             </a>

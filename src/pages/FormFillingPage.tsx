@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
-import UserProfile from '@/components/UserProfile';
-import { ArrowLeft, ChevronDown, Mic } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { useAuth } from '../context/AuthContext';
+import UserProfile from '../components/UserProfile';
+import { ArrowLeft, ChevronDown, Clock } from 'lucide-react';
+import { Button } from '../components/ui/button';
+import { Card, CardContent } from '../components/ui/card';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../components/ui/collapsible';
+import VoiceAssistant from '../components/VoiceAssistant';
 
 interface FormSection {
   id: number;
@@ -25,6 +26,21 @@ type FormStructure = {
   [section: string]: FormField[];
 };
 
+interface LocalFormSectionWithFields {
+  id: number;
+  title: string;
+  fields: {
+    id: string;
+    sectionId: string;
+    fieldKey: string;
+    label: string;
+    value?: string;
+    required: boolean;
+    type: string;
+    options?: string[];
+  }[];
+}
+
 const FormFillingPage: React.FC = () => {
   const { currentUser } = useAuth();
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -34,7 +50,6 @@ const FormFillingPage: React.FC = () => {
   const [formStructure, setFormStructure] = useState<FormStructure>({});
   const [formData, setFormData] = useState<{ [key: string]: string }>({});
   const [sections, setSections] = useState<FormSection[]>([]);
-  const [listeningStatus, setListeningStatus] = useState<'off' | 'speaking' | 'ready'>('off');
 
   const getFormTitle = () => {
     switch (formType) {
@@ -53,10 +68,6 @@ const FormFillingPage: React.FC = () => {
     setSections(sections.map(section =>
       section.id === id ? { ...section, isOpen: !section.isOpen } : section
     ));
-  };
-
-  const toggleVoiceAssistant = () => {
-    setListeningStatus(prev => (prev === 'off' ? 'ready' : 'off'));
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -149,26 +160,113 @@ const FormFillingPage: React.FC = () => {
 
   // Recursive rendering of fields including nested fields
   const renderFields = (fields: FormField[]) => {
-    return fields.map((field, idx) => (
-      <div key={idx} className="mb-4">
-        <label className="block text-sm font-medium mb-1" htmlFor={field.name}>
-          {field.label}
-        </label>
-        <input
-          type={field.type}
-          name={field.name}
-          id={field.name}
-          value={formData[field.name] || ''}
-          onChange={handleInputChange}
-          className="w-full border border-input rounded-md px-3 py-2 text-sm"
-        />
-        {field.fields && field.fields.length > 0 && (
-          <div className="pl-4 border-l border-gray-300 mt-2">
-            {renderFields(field.fields)}
+    return fields.map((field, idx) => {
+      if (field.type === 'radio' && field.options && field.options.length > 0) {
+        return (
+          <div key={idx} className="mb-4">
+            <label className="block text-sm font-medium mb-1">
+              {field.label}
+            </label>
+            <div className="flex flex-col space-y-1">
+              {field.options.map((option, optionIdx) => (
+                <label key={optionIdx} className="inline-flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    name={field.name}
+                    value={option}
+                    checked={formData[field.name] === option}
+                    onChange={handleInputChange}
+                    className="form-radio text-primary"
+                  />
+                  <span>{option}</span>
+                </label>
+              ))}
+            </div>
+            {field.fields && field.fields.length > 0 && (
+              <div className="pl-4 border-l border-gray-300 mt-2">
+                {renderFields(field.fields)}
+              </div>
+            )}
           </div>
-        )}
-      </div>
-    ));
+        );
+      } else {
+        return (
+          <div key={idx} className="mb-4">
+            <label className="block text-sm font-medium mb-1" htmlFor={field.name}>
+              {field.label}
+            </label>
+            <input
+              type={field.type}
+              name={field.name}
+              id={field.name}
+              value={formData[field.name] || ''}
+              onChange={handleInputChange}
+              className="w-full border border-input rounded-md px-3 py-2 text-sm"
+            />
+            {field.fields && field.fields.length > 0 && (
+              <div className="pl-4 border-l border-gray-300 mt-2">
+                {renderFields(field.fields)}
+              </div>
+            )}
+          </div>
+        );
+      }
+    });
+  };
+
+  // Transform formStructure and sections to VoiceAssistant expected format
+  const transformToVoiceAssistantSections = (): LocalFormSectionWithFields[] => {
+    return sections.map(section => {
+      const fields = formStructure[section.title] || [];
+      
+      const transformField = (field: FormField): LocalFormSectionWithFields['fields'][number] => {
+        return {
+          id: `${section.id}-${field.name}`, // Unique ID for the field
+          sectionId: section.id.toString(),
+          fieldKey: field.name,
+          label: field.label,
+          value: formData[field.name] || '',
+          required: true, // Assuming all fields are required; adjust if needed
+          type: field.type,
+          options: field.options,
+          // Note: Nested fields are not supported in VoiceAssistant; flatten if needed
+        };
+      };
+      
+      return {
+        id: section.id,
+        title: section.title,
+        fields: fields.map(transformField)
+      };
+    });
+  };
+
+  // Handler for field updates from VoiceAssistant
+  const onFieldUpdate = (sectionId: number, fieldKey: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [fieldKey]: value
+    }));
+  };
+
+  // Handler for form submission
+  const onFormSubmit = () => {
+    // For now, just log the formData and navigate back to main page
+    console.log("Form submitted with data:", formData);
+    navigate('/main');
+  };
+
+  // Format time difference for last edited display
+  const formatTimeAgo = (date: Date) => {
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    if (diffMins < 1) return 'just now';
+    if (diffMins < 60) return `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
+    const diffHours = Math.floor(diffMins / 60);
+    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+    const diffDays = Math.floor(diffHours / 24);
+    return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
   };
 
   return (
@@ -238,7 +336,7 @@ const FormFillingPage: React.FC = () => {
                   <Button variant="outline" onClick={() => navigate('/main')}>
                     Back
                   </Button>
-                  <Button className="bg-primary hover:bg-primary/90 text-white">
+                  <Button className="bg-primary hover:bg-primary/90 text-white" onClick={onFormSubmit}>
                     Submit Form
                   </Button>
                 </div>
@@ -248,57 +346,12 @@ const FormFillingPage: React.FC = () => {
 
           {/* Voice Assistant */}
           <div className="lg:col-span-1">
-            <Card className="bg-white shadow-md rounded-lg">
-              <CardContent className="p-6">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-xl font-bold">FormEase Voice Assistant</h2>
-                </div>
-
-                <div className="flex justify-between items-center mb-4">
-                  <span className="text-sm text-foreground/70">Language:</span>
-                  <select className="bg-transparent border border-input rounded-md text-sm focus:outline-none p-1">
-                    <option>English</option>
-                    <option>Hindi</option>
-                  </select>
-                </div>
-
-                <div className="bg-blue-50 p-4 rounded-lg mb-8">
-                  <p className="text-blue-800">
-                    Welcome to the {getFormTitle()} form! I'm your FormEase assistant, and I'll help you complete this form using voice commands.
-                  </p>
-                </div>
-
-                <div className="flex flex-col items-center justify-center space-y-6">
-                  <Button
-                    className={`h-20 w-20 rounded-full flex items-center justify-center ${
-                      listeningStatus === 'off' ? 'bg-primary/20' : 'bg-primary animate-pulse'
-                    }`}
-                    onClick={toggleVoiceAssistant}
-                  >
-                    <Mic className={`h-8 w-8 ${listeningStatus === 'off' ? 'text-primary' : 'text-white'}`} />
-                  </Button>
-
-                  <div className="flex justify-around w-full text-xs text-foreground/70">
-                    <div className="flex items-center">
-                      <span className={`h-2 w-2 rounded-full mr-1 ${listeningStatus === 'off' ? 'bg-foreground/30' : 'bg-transparent'}`} />
-                      Listening off
-                    </div>
-                    <div className="flex items-center">
-                      <span className={`h-2 w-2 rounded-full mr-1 ${listeningStatus === 'speaking' ? 'bg-green-500' : 'bg-transparent'}`} />
-                      Speaking...
-                    </div>
-                    <div className="flex items-center">
-                      <span className={`h-2 w-2 rounded-full mr-1 ${listeningStatus === 'ready' ? 'bg-blue-500' : 'bg-transparent'}`} />
-                      Ready
-                    </div>
-                  </div>
-
-                  <p className="text-xs text-center text-foreground/70">
-                    Click the microphone button and speak to fill out your form. Try phrases like "My name is..."
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+            <VoiceAssistant
+              formCode={formType ? (formType === 'aadhaar' ? 'aadhaar' : formType === 'voter id' ? 'default' : formType) : ''}
+              formSections={transformToVoiceAssistantSections()}
+              onFieldUpdate={onFieldUpdate}
+              onFormSubmit={onFormSubmit}
+            />
           </div>
         </div>
       </main>

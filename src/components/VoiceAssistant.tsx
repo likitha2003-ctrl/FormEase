@@ -114,6 +114,12 @@ export default function VoiceAssistant({
   
   // Track initialization to prevent multiple runs
   const hasInitialized = useRef(false);
+
+  // Track if welcome message has been spoken
+  const welcomeMessageSpoken = useRef(false);
+
+  // Track if welcome message has been displayed
+  const welcomeMessageDisplayed = useRef(false);
   
   // Memoized form sections data
   const memoizedFormSections = useMemo<LocalFormSectionWithFields[]>(() => {
@@ -246,6 +252,8 @@ export default function VoiceAssistant({
         // Call backend API to get welcome message
         const response = await fetch(`/api/welcome-message/${normalizedFormCode}`);
         if (!response.ok) {
+          const text = await response.text();
+          console.error(`Failed to fetch welcome message for formCode: ${normalizedFormCode}, response text:`, text);
           throw new Error(`Failed to fetch welcome message for formCode: ${normalizedFormCode}`);
         }
         const data = await response.json();
@@ -377,8 +385,14 @@ export default function VoiceAssistant({
       // Fetch welcome message dynamically from nlp-processor backend
       const welcomeMsg = await getWelcomeMessage(formCode);
 
-      setMessages([{ sender: "bot", text: welcomeMsg, thinking: false, id: `welcome-${Date.now().toString()}` } as ExtendedChatMessage]);
-      speakText(welcomeMsg, `welcome-${Date.now().toString()}`);
+      if (!welcomeMessageDisplayed.current) {
+        setMessages([{ sender: "bot", text: welcomeMsg, thinking: false, id: `welcome-${Date.now().toString()}` } as ExtendedChatMessage]);
+        welcomeMessageDisplayed.current = true;
+      }
+      if (!welcomeMessageSpoken.current) {
+        speakText(welcomeMsg, `welcome-${Date.now().toString()}`);
+        welcomeMessageSpoken.current = true;
+      }
 
       const personalSection = memoizedFormSections.find(s => s.title.includes("Personal"));
       const allSections = personalSection ? 

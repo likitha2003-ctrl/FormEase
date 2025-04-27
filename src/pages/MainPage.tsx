@@ -97,22 +97,19 @@ const MainPage: React.FC = () => {
       id: 'passport',
       title: 'Passport Application',
       description: 'Apply for new passport or renew existing one',
-      icon: FileText,
-      color: 'bg-primary/10 text-primary',
+      imageSrc: '/form-logo.png', // Add your image path here
     },
     {
       id: 'aadhaar',
       title: 'Aadhaar Card',
       description: 'Apply or update your Aadhaar identification',
-      icon: UserCheck,
-      color: 'bg-secondary/20 text-secondary',
+      imageSrc: '/form-logo1.jpg', // Add your image path here
     },
     {
       id: 'voter id',
       title: 'Voter ID',
       description: 'Apply for Voter ID or update your details',
-      icon: CreditCard,
-      color: 'bg-accent/20 text-accent',
+      imageSrc: '/form-logo2.png', // Add your image path here
     },
   ];
 
@@ -176,8 +173,10 @@ const MainPage: React.FC = () => {
           {forms.map((form, index) => (
             <Card key={index} className="h-full rounded-2xl p-6 bg-white/80 backdrop-blur-sm border border-white/20 shadow-lg flex flex-col">
               <CardContent className="flex flex-col items-center flex-grow">
-              <div className={`h-16 w-16 ${form.color} rounded-full mb-4 flex items-center justify-center`}>
-                <form.icon className="h-8 w-8" />
+              <div className="h-16 w-16 rounded-full mb-4 flex items-center justify-center bg-gray-100 overflow-hidden">
+                {form.imageSrc ? (
+                  <img src={form.imageSrc} alt={`${form.title} icon`} className="h-full w-full object-cover" />
+                ) : null}
                 </div>
                 <div className="flex-grow flex flex-col">
                   <h3 className="text-lg font-semibold text-foreground mb-2">{form.title}</h3>

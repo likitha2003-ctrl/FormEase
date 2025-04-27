@@ -152,19 +152,19 @@
        "fields": [
          {
            "field_name": "a. POI (Proof of Identity)",
-           "type": "text"
+           "type": "file"
          },
          {
            "field_name": "b. POA (Proof of Address)",
-           "type": "text"
+           "type": "file"
          },
          {
            "field_name": "c. DOB (Date of Birth)",
-           "type": "text"
+           "type": "file"
          },
          {
            "field_name": "d. POR (Proof of Relation)",
-           "type": "text"
+           "type": "file"
          }
        ]
      }

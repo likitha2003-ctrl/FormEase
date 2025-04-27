@@ -77,19 +77,39 @@ const FormFillingPage: React.FC = () => {
 
   // Helper function to transform raw JSON fields to FormField[]
   const transformFields = (fields: any[]): FormField[] => {
-    return fields.map((field) => {
-      const transformedField: FormField = {
-        label: field.field_name,
-        name: field.field_name.replace(/\s+/g, '_').toLowerCase(),
-        type: field.type || 'text',
-      };
-      if (field.options) {
-        transformedField.options = field.options;
+    return fields.flatMap((field) => {
+      if (field.subsection) {
+        // Handle subsection recursively
+        const subsectionFields = transformFields(field.fields || []);
+        return [{
+          label: field.subsection,
+          name: field.subsection.replace(/\s+/g, '_').toLowerCase(),
+          type: 'subsection',
+          fields: subsectionFields
+        }];
+      } else if (field.section) {
+        // Handle section inside fields recursively as subsection
+        const subsectionFields = transformFields(field.fields || []);
+        return [{
+          label: field.section,
+          name: field.section.replace(/\s+/g, '_').toLowerCase(),
+          type: 'subsection',
+          fields: subsectionFields
+        }];
+      } else {
+        const transformedField: FormField = {
+          label: field.field_name,
+          name: field.field_name.replace(/\s+/g, '_').toLowerCase(),
+          type: field.type || 'text',
+        };
+        if (field.options) {
+          transformedField.options = field.options;
+        }
+        if (field.fields) {
+          transformedField.fields = transformFields(field.fields);
+        }
+        return [transformedField];
       }
-      if (field.fields) {
-        transformedField.fields = transformFields(field.fields);
-      }
-      return transformedField;
     });
   };
 
@@ -148,6 +168,8 @@ const FormFillingPage: React.FC = () => {
           }
         }
 
+        console.log("Loaded Sections:", newSections);
+        console.log("Transformed Structure Keys:", Object.keys(transformedStructure));
         setSections(newSections);
         setFormStructure(transformedStructure);
       } catch (error) {
@@ -158,10 +180,23 @@ const FormFillingPage: React.FC = () => {
     loadFormStructure();
   }, [formType]);
 
-  // Recursive rendering of fields including nested fields
+  // Recursive rendering of fields including nested fields with collapsible subsections
   const renderFields = (fields: FormField[]) => {
     return fields.map((field, idx) => {
-      if (field.type === 'radio' && field.options && field.options.length > 0) {
+      if (field.type === 'subsection' && field.fields && field.fields.length > 0) {
+        return (
+          <Collapsible key={idx} defaultOpen={true} className="mb-6 pl-4 border-l-4 border-primary rounded-md">
+            <CollapsibleTrigger className="w-full">
+              <div className="flex items-center p-2 bg-primary/10 rounded-md cursor-pointer select-none">
+                <h3 className="text-lg font-semibold">{field.label}</h3>
+              </div>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="bg-white p-4 rounded-b-md border-t border-primary/50">
+              {renderFields(field.fields)}
+            </CollapsibleContent>
+          </Collapsible>
+        );
+      } else if (field.type === 'radio' && field.options && field.options.length > 0) {
         return (
           <div key={idx} className="mb-4">
             <label className="block text-sm font-medium mb-1">

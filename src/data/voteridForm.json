@@ -170,6 +170,57 @@
         ]
       },
       {
+        "section": "Enclosures",
+        "fields": [
+          {
+            "subsection": "Age Proof",
+            "fields": [
+              {
+                "field_name": "Adhaar Card",
+                "type": "file"
+              },
+              {
+                "field_name": "Birth Certificate",
+                "type": "file"
+              },
+              {
+                "field_name": "Class X/XII Certificate",
+                "type": "file"
+              },
+              {
+                "field_name": "Driving License",
+                "type": "file"
+              },
+              {
+                "field_name": "PAN Card",
+                "type": "file"
+              }
+            ]
+          },
+          {
+            "subsection": "Address Proof",
+            "fields": [
+              {
+                "field_name": "Aadhaar Card",
+                "type": "file"
+              },
+              {
+                "field_name": "Water/Electricity/Gas Bill",
+                "type": "file"
+              },
+              {
+                "field_name": "Current Passbook",
+                "type": "file"
+              },
+              {
+                "field_name": "Registered Rent Lease Deed(In case of tenant)",
+                "type": "file"
+              }
+            ]
+          }
+        ]
+      },
+      {
         "section": "Declaration",
         "fields": [
           {

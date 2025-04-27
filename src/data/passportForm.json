@@ -437,56 +437,80 @@
             "type": "text"
           },
           {
+            "field_name": "upload payment receipt",
+            "type": "file"
+          },
+          {
+            "field_name": "DD Issuing Branch Code",
+            "type": "text"
+          },
+          {
             "field_name": "DD Expiry Date",
             "type": "date"
           }
         ]
       },
-     {
-       "section": "9. Enclosures",
-       "fields": [
-         {
-           "field_name": "1.",
-           "type": "text"
-         },
-         {
-           "field_name": "2.",
-           "type": "text"
-         },
-         {
-           "field_name": "3.",
-           "type": "text"
-         },
-         {
-           "field_name": "4.",
-           "type": "text"
-         },
-         {
-           "field_name": "5.",
-           "type": "text"
-         },
-         {
-           "field_name": "6.",
-           "type": "text"
-         },
-         {
-           "field_name": "7.",
-           "type": "text"
-         },
-         {
-           "field_name": "8.",
-           "type": "text"
-         },
-         {
-           "field_name": "9.",
-           "type": "text"
-         },
-         {
-           "field_name": "10.",
-           "type": "text"
-         }
-       ]
-     },
+      {
+        "section": "9. Enclosures",
+        "fields": [
+          {
+            "subsection": "Proof of Identity",
+            "fields": [
+              {
+                "field_name": "1. Adhaar Card",
+                "type": "file"
+              },
+              {
+                "field_name": "2. Voter Id ",
+                "type": "file"
+              },
+              {
+                "field_name": "3. PAN Card ",
+                "type": "file"
+              }
+            ]
+          },
+          {
+            "subsection": "Proof of Address",
+            "fields": [
+              {
+                "field_name": "4. Adhaar Card ",
+                "type": "file"
+              },
+              {
+                "field_name": "5. Gas bill ",
+                "type": "file"
+              },
+              {
+                "field_name": "6. Elcetricity bill ",
+                "type": "file"
+              }
+            ]
+          },
+          {
+            "subsection": "Proof of Date of Birth",
+            "fields": [
+              {
+                "field_name": "7. Birth Certificate ",
+                "type": "file"
+              },
+              {
+                "field_name": "8. Other Document ",
+                "type": "file"
+              }
+            ]
+          },
+          {
+            "subsection": "Passport Photo",
+            "fields": [
+              {
+                "field_name": "9. Passport size photo",
+                "type": "file"
+              }
+            ]
+          }
+        ]
+      },
      {
        "section": "10. Declaration",
        "fields": [

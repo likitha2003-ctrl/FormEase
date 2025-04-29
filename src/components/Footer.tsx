@@ -12,7 +12,7 @@ const Footer = () => {
             <div className="flex items-center space-x-2 mb-4">
               <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center"
                 style={{ 
-                  backgroundImage: "url('/public/logo.jpeg')", 
+                  backgroundImage: "url('/logo.jpeg')", 
                   backgroundSize: 'cover' }}
               />
               <span className="font-bold text-xl">FormEase</span>

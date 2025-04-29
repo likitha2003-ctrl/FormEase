@@ -59,7 +59,7 @@ const Header = () => {
         <div className="flex items-center space-x-2">
           <div className="h-8 w-8 rounded-full flex items-center justify-center"
             style={{ 
-              background: "url('/public/logo.jpeg')", 
+              background: "url('/logo.jpeg')", 
               backgroundSize: 'cover' }}
             />
           <span className="font-bold text-xl text-primary hover:text-orange-600 transition-colors">FormEase</span>
